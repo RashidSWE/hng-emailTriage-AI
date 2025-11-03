@@ -12,9 +12,9 @@ api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise EnvironmentError("google api key environment not found/set")
 
-# provider = GoogleGLAProvider(api_key=api_key)
+provider = GoogleGLAProvider(api_key=api_key)
 
-model = GeminiModel("gemini-2.5-flash", api_key=api_key)
+model = GeminiModel("gemini-2.5-flash", provider=provider)
 
 email_agent = (
         Agent(
