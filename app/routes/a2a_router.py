@@ -58,6 +58,7 @@ async def jsonrpc_endpoint(request: Request):
         if method == "analyze_email":
             a2a_request = A2ARequest(**params)
 
+            email_data = a2a_request.input
             prompt_text = f"From: {email_data.sender}\nBody: {email_data.body}"
             result = await email_agent.run(prompt_text)
 
