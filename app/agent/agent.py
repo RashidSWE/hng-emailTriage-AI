@@ -14,7 +14,7 @@ if not api_key:
 
 # provider = GoogleGLAProvider(api_key=api_key)
 
-model = GeminiModel("gemini-2.5-flash", api_key=papi_key)
+model = GeminiModel("gemini-2.5-flash", api_key=api_key)
 
 email_agent = (
         Agent(
