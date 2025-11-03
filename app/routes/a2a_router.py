@@ -57,7 +57,9 @@ async def jsonrpc_endpoint(request: Request):
         
         if method == "analyze_email":
             a2a_request = A2ARequest(**params)
-            result = await email_agent.run(a2a_request.input.model_dump())
+
+            prompt_text = f"From: {email_data.sender}\nBody: {email_data.body}"
+            result = await email_agent.run(prompt_text)
 
             usage_info = getattr(result, "usage", {}) or {}
             tokens_used = usage_info.get("total_tokens", 0) if isinstance(usage_info, dict) else 0
