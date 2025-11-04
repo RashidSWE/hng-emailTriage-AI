@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from ..models.models import A2ARequest, A2AResponse, EmailInput
 from ..agent.agent import email_agent
+from uuid import uuid4
 
 router = APIRouter(prefix="/a2a")
 
@@ -91,7 +92,23 @@ async def jsonrpc_endpoint(request: Request):
                 usage={"model": "gemini-1.5-flash", "tokens_used": tokens_used},
                 status="success"
             )
-            rpc_result = a2a_response.model_dump()
+
+            task_id = str(uuid4)
+            rpc_result ={
+                "Task": {
+                    "id": task_id,
+                    "status": {
+                        "state": "completed",
+                        "output": a2a_response.output.model_dump()
+                    }
+                },
+                "Message": {
+                    "role": "assistant",
+                    "parts": [
+                        {"kind": "text", "text": "✅ Email processed successfully."}
+                    ]
+                }
+            }
         else:
             return{
                 "jsonrpc": "2.0",
@@ -105,6 +122,6 @@ async def jsonrpc_endpoint(request: Request):
         }
     except Exception as e:
         return {
-            "jonsrpc": "2.0",
+            "jsonrpc": "2.0",
             "error": {"code": -32603, "message": f"Internal error: {str(e)}"}
         }
