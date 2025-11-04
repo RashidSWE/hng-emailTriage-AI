@@ -1,0 +1,27 @@
+{
+  "active": true,
+  "category": "productivity",
+  "description": "An AI agent that classifies and summarizes emails intelligently.",
+  "id": "email_triage_agent_001",
+  "long_description": "You are an Email Triage Agent that receives an email and classifies it.\n\nInput:\n- sender: the email address of the sender\n- body: raw email text\n\nOutput:\n- summary: one-sentence summary\n- category: one of [spam, inquiry, invoice, support_request, personal, other]\n- urgency: one of [low, medium, high]\n- suggested_reply_draft: a short, polite professional reply (or empty string for spam)\n\nBehavior:\n- Always respond in structured JSON\n- Be concise but professional\n- Focus on understanding the context and tone of the message\n- Suggest helpful and polite replies",
+  "name": "email_triage_agent",
+  "nodes": [
+    {
+      "id": "email_triage_node",
+      "name": "Email Triage Agent",
+      "parameters": {},
+      "position": [
+        800,
+        200
+      ],
+      "type": "a2a/custom-a2a-node",
+      "typeVersion": 1,
+      "url": "https://hng-emailtriage-ai-production.up.railway.app/a2a/jsonrpc"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "short_description": "AI agent that classifies and summarizes emails."
+}
