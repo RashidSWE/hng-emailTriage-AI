@@ -64,14 +64,19 @@ async def jsonrpc_endpoint(request: Request):
         rpc_id = data.get("id")
 
         
-        if method == "analyze_email":
-            a2a_request = A2ARequest(**params)
+        if method in ["analyze_email", "message/send"]:
+            if isinstance(params, dict) and "message" in params:
+                message = params.get("message", {})
+                text_parts = [p.get("text", "") for p in message.get("parts", []) if p.get("kind") == "text"]
+                email_text = "\n".join(text_parts)
+                prompt_text = f"Body: {email_text}"
+            else:
+                a2a_request = A2ARequest(**params)
+                email_data = a2a_request.input
+                prompt_text = f"From: {email_data.sender}\nBody: {email_data.body}"
 
-            email_data = a2a_request.input
-            prompt_text = f"From: {email_data.sender}\nBody: {email_data.body}"
+
             result = await email_agent.run(prompt_text)
-
-
             output_data = (
                 result.output.model_dump()
                 if hasattr(result.output, "model_dump")
