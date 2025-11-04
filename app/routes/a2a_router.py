@@ -94,7 +94,7 @@ async def jsonrpc_endpoint(request: Request):
             )
 
             task_id = str(uuid4())
-            message_id = str(uudi4())
+            message_id = str(uuid4())
             rpc_result ={
                 "Task": {
                     "id": task_id,
