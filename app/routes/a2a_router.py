@@ -93,7 +93,8 @@ async def jsonrpc_endpoint(request: Request):
                 status="success"
             )
 
-            task_id = str(uuid4)
+            task_id = str(uuid4())
+            message_id = str(uudi4())
             rpc_result ={
                 "Task": {
                     "id": task_id,
@@ -103,6 +104,7 @@ async def jsonrpc_endpoint(request: Request):
                     }
                 },
                 "Message": {
+                    "messageId": message_id,
                     "role": "assistant",
                     "parts": [
                         {"kind": "text", "text": "✅ Email processed successfully."}
