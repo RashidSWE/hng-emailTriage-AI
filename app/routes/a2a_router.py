@@ -96,20 +96,16 @@ async def jsonrpc_endpoint(request: Request):
             task_id = str(uuid4())
             message_id = str(uuid4())
             rpc_result ={
-                "Task": {
-                    "id": task_id,
-                    "status": {
-                        "state": "completed",
-                        "output": a2a_response.output.model_dump()
-                    }
+                "id": task_id,
+                "status": {
+                    "state": "completed",
+                    "output": a2a_response.output.model_dump()
                 },
-                "Message": {
-                    "messageId": message_id,
-                    "role": "assistant",
-                    "parts": [
-                        {"kind": "text", "text": "✅ Email processed successfully."}
-                    ]
-                }
+                "messageId": message_id,
+                "role": "assistant",
+                "parts": [
+                    {"kind": "text", "text": "✅ Email processed successfully."}
+                ]
             }
         else:
             return{
