@@ -10,9 +10,18 @@ async def get_agent(request: A2ARequest):
     try:
         result = await email_agent.run(request.input.model_dump())
 
+        output_data = (
+            result.output.model_dump()
+            if hasattr(result.output, "model_dump")
+            else result.output
+        )
+
+        tokens_used = 0
+        if isinstance(result.usage, dict):
+            tokens_used = result.usage.get("total_tokens", 0)
         response = A2AResponse(
-            output=result.output,
-            usage={"model": "gemini-1.5-flash", "tokens_used": result.usage.get("total_tokens", 0)},
+            output=output_data,
+            usage={"model": "gemini-1.5-flash", "tokens_used": tokens_used},
             status="success"
         )
 
@@ -62,11 +71,18 @@ async def jsonrpc_endpoint(request: Request):
             prompt_text = f"From: {email_data.sender}\nBody: {email_data.body}"
             result = await email_agent.run(prompt_text)
 
+
+            output_data = (
+                result.output.model_dump()
+                if hasattr(result.output, "model_dump")
+                else result.output
+            )
+    
             usage_info = getattr(result, "usage", {}) or {}
             tokens_used = usage_info.get("total_tokens", 0) if isinstance(usage_info, dict) else 0
 
             a2a_response = A2AResponse(
-                output=result.output,
+                output=output_data,
                 usage={"model": "gemini-1.5-flash", "tokens_used": tokens_used},
                 status="success"
             )
@@ -75,7 +91,7 @@ async def jsonrpc_endpoint(request: Request):
             return{
                 "jsonrpc": "2.0",
                 "error": {"code": -32601, "message": f"Method `{method}` not found"},
-                id: rpc_id
+                "id": rpc_id
             }
         return {
             "jsonrpc": "2.0",
