@@ -150,21 +150,28 @@ JSON-RPC 2.0 compatible endpoint for Telex A2A workflows.
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "result": {
-    "output": {
-      "summary": "HR sent a monthly payslip.",
-      "category": "invoice",
-      "urgency": "low",
-      "suggested_reply_draft": "Thank you for sharing the payslip."
-    },
-    "usage": {
-      "model": "gemini-1.5-flash",
-      "tokens_used": 221
-    },
-    "status": "success"
-  },
-  "id": 1
+	"jsonrpc": "2.0",
+	"result": {
+		"id": "fc9c856a-71a1-4f89-875f-a9d3fe0a6bff",
+		"status": {
+			"state": "completed",
+			"output": {
+				"summary": "The email contains the recipient's monthly payslip from HR.",
+				"category": "invoice",
+				"urgency": "low",
+				"suggested_draft": "Thank you for sending this month's payslip."
+			}
+		},
+		"messageId": "780af71a-37f2-4035-b14d-94b1bd760376",
+		"role": "assistant",
+		"parts": [
+			{
+				"kind": "text",
+				"text": "✅ Email processed successfully."
+			}
+		]
+	},
+	"id": 1
 }
 ```
 
