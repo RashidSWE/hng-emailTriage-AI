@@ -93,6 +93,19 @@ async def jsonrpc_endpoint(request: Request):
                 status="success"
             )
 
+            summary = output_data.get("summary", "No summary available.")
+            category = output_data.get("category", "N/A")
+            urgency = output_data.get("urgency", "N/A")
+            suggested_draft = output_data.get("suggested_draft", "No reply suggested.")
+
+            formatted_text = (
+                f"📧 **Email Triage Results**\n\n"
+                f"**Summary:** {summary}\n"
+                f"**Category:** {category}\n"
+                f"**Urgency:** {urgency}\n\n"
+                f"**Suggested Reply:**\n{suggested_draft}"
+            )
+
             task_id = str(uuid4())
             message_id = str(uuid4())
             rpc_result ={
@@ -104,7 +117,7 @@ async def jsonrpc_endpoint(request: Request):
                 "messageId": message_id,
                 "role": "assistant",
                 "parts": [
-                    {"kind": "text", "text": "✅ Email processed successfully."}
+                    {"kind": "text", "text": formatted_text}
                 ]
             }
         else:
