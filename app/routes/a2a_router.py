@@ -87,23 +87,12 @@ async def jsonrpc_endpoint(request: Request):
             usage_info = getattr(result, "usage", {}) or {}
             tokens_used = usage_info.get("total_tokens", 0) if isinstance(usage_info, dict) else 0
 
-            a2a_response = A2AResponse(
-                output=output_data,
-                usage={"model": "gemini-1.5-flash", "tokens_used": tokens_used},
-                status="success"
-            )
-
-            summary = output_data.get("summary", "No summary available.")
-            category = output_data.get("category", "N/A")
-            urgency = output_data.get("urgency", "N/A")
-            suggested_draft = output_data.get("suggested_draft", "No reply suggested.")
-
             formatted_text = (
-                f"📧 **Email Triage Results**\n\n"
-                f"**Summary:** {summary}\n"
-                f"**Category:** {category}\n"
-                f"**Urgency:** {urgency}\n\n"
-                f"**Suggested Reply:**\n{suggested_draft}"
+                f"📧 **Email Analyzed**\n"
+                f"**Summary:** {output_data.get('summary', 'N/A')}\n"
+                f"**Category:** {output_data.get('category', 'N/A')}\n"
+                f"**Urgency:** {output_data.get('urgency', 'N/A')}\n\n"
+                f"**Draft Reply:**\n{output_data.get('suggested_draft', 'N/A')}"
             )
 
             task_id = str(uuid4())
@@ -112,13 +101,7 @@ async def jsonrpc_endpoint(request: Request):
                 "messageId": message_id,
                 "role": "agent",
                 "parts": [
-                    {"kind": "text", "text": (
-                f"📧 **Email Analyzed**\n"
-                f"**Summary:** {output_data.get('summary')}\n"
-                f"**Category:** {output_data.get('category')}\n"
-                f"**Urgency:** {output_data.get('urgency')}\n\n"
-                f"**Draft Reply:**\n{output_data.get('suggested_draft')}"
-            )}
+                    {"kind": "text", "text": formatted_text}
                 ]
             }
         else:
