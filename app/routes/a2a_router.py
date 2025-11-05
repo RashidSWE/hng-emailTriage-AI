@@ -99,7 +99,7 @@ async def jsonrpc_endpoint(request: Request):
                 "id": task_id,
                 "status": {
                     "state": "completed",
-                    "output": output_data
+                    "output": a2a_response
                 },
                 "messageId": message_id,
                 "role": "assistant",
