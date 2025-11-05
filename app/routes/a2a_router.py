@@ -117,7 +117,13 @@ async def jsonrpc_endpoint(request: Request):
                 "messageId": message_id,
                 "role": "assistant",
                 "parts": [
-                    {"kind": "text", "text": formatted_text}
+                    {"kind": "text", "text": (
+                f"📧 **Email Analyzed**\n"
+                f"**Summary:** {output_data.get('summary')}\n"
+                f"**Category:** {output_data.get('category')}\n"
+                f"**Urgency:** {output_data.get('urgency')}\n\n"
+                f"**Draft Reply:**\n{output_data.get('suggested_draft')}"
+            )}
                 ]
             }
         else:
