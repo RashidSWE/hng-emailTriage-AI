@@ -79,7 +79,7 @@ async def jsonrpc_endpoint(request: Request):
 
             result = await email_agent.run(prompt_text)
             output_data = (
-                result.output.model_dump()
+                result.output.model_dump(mode='json')
                 if hasattr(result.output, "model_dump")
                 else result.output
             )
